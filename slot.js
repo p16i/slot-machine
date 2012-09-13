@@ -13,35 +13,7 @@ $(document).ready(function() {
     * Global variables
     */
     var completed = 0,
-        imgHeight = 1374,
-        posArr = [
-            0, //orange
-            80, //number 7 
-            165, //bar
-            237, //guava
-            310, //banana
-            378, //cherry
-            454, //orange
-            539, //number 7
-            624, //bar
-            696, //guava
-            769, //banana
-            837, //cherry
-            913, //orange
-            1000, //number 7
-            1085, //bar
-            1157, //guava
-            1230, //banana
-            1298 //cherry
-        ];
-    
-    var win = [];
-    win[0] = win[454] = win[913] = 1;
-    win[80] = win[539] = win[1000] = 2;
-    win[165] = win[624] = win[1085] = 3;
-    win[237] = win[696] = win[1157] = 4;
-    win[310] = win[769] = win[1230] = 5;
-    win[378] = win[837] = win[1298] = 6;
+        imgHeight = 400;
 
     /**
     * @class Slot
@@ -87,18 +59,12 @@ $(document).ready(function() {
             limit = 30;
         clearInterval(_this.si);
         _this.si = window.setInterval(function() {
-            if(_this.speed > limit) {
-                _this.speed -= _this.step;
-                $(_this.el).spSpeed(_this.speed);
-            }
-            if(_this.speed <= limit) {
-                _this.finalPos(_this.el);
-                $(_this.el).spSpeed(0);
-                $(_this.el).spStop();
-                clearInterval(_this.si);
-                $(_this.el).removeClass('motion');
-                _this.speed = 0;
-            }
+            _this.finalPos(_this.el);
+            $(_this.el).spSpeed(0);
+            $(_this.el).spStop();
+            clearInterval(_this.si);
+            $(_this.el).removeClass('motion');
+            _this.speed = 0;
         }, 100);
     };
 
@@ -109,46 +75,30 @@ $(document).ready(function() {
     Slot.prototype.finalPos = function() {
         var el = this.el,
             el_id,
-            pos,
-            posMin = 2000000000,
-            best,
-            bgPos,
-            i,
-            j,
-            k;
+            pos;
 
         el_id = $(el).attr('id');
-        //pos = $(el).css('background-position'); //for some unknown reason, this does not work in IE
+
         pos = document.getElementById(el_id).style.backgroundPosition;
         pos = pos.split(' ')[1];
         pos = parseInt(pos, 10);
 
-        for(i = 0; i < posArr.length; i++) {
-            for(j = 0;;j++) {
-                k = posArr[i] + (imgHeight * j);
-                if(k > pos) {
-                    if((k - pos) < posMin) {
-                        posMin = k - pos;
-                        best = k;
-                        this.pos = posArr[i]; //update the final position of the slot
-                    }
-                    break;
+        pos = Math.ceil( pos / 80 ) * 80;
+        this.pos = Math.ceil( ( pos % 400 ) / 80 );
+
+        $(el).animate(
+            {
+                backgroundPosition: pos
+            },
+            {
+                duration: 200,
+                complete: function(){
+                    completed++;
                 }
             }
-        }
-
-        best += imgHeight + 4;
-        bgPos = "0 " + best + "px";
-        $(el).animate({
-            backgroundPosition:"(" + bgPos + ")"
-        }, {
-            duration: 200,
-            complete: function() {
-                completed ++;
-            }
-        });
+        );
     };
-    
+
     /**
     * @method reset
     * Reset a slot to initial state
@@ -156,7 +106,7 @@ $(document).ready(function() {
     Slot.prototype.reset = function() {
         var el_id = $(this.el).attr('id');
         $._spritely.instances[el_id].t = 0;
-        $(this.el).css('background-position', '0px 4px');
+        $(this.el).css('background-position', '0px 0px');
         this.speed = 0;
         completed = 0;
         $('#result').html('');
@@ -172,7 +122,9 @@ $(document).ready(function() {
 
     function printResult() {
         var res;
-        if(win[a.pos] === win[b.pos] && win[a.pos] === win[c.pos]) {
+
+        console.log( a.pos, b.pos, c.pos );
+        if( a.pos  === b.pos && a.pos === c.pos) {
             res = "You Win!";
         } else {
             res = "You Lose";
@@ -195,9 +147,9 @@ $(document).ready(function() {
             b.start();
             c.start();
             this.innerHTML = "Stop";
-            
+
             disableControl(); //disable control until the slots reach max speed
-            
+
             //check every 100ms if slots have reached max speed 
             //if so, enable the control
             x = window.setInterval(function() {
@@ -213,7 +165,7 @@ $(document).ready(function() {
             this.innerHTML = "Reset";
 
             disableControl(); //disable control until the slots stop
-            
+
             //check every 100ms if slots have stopped
             //if so, enable the control
             x = window.setInterval(function() {

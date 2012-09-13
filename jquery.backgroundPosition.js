@@ -51,8 +51,10 @@
 			
 			start = toArray(start);
 			fx.start = [start[0],start[2]];
-			var end = toArray(fx.end);
-			fx.end = [end[0],end[2]];
+
+            var new_end = fx.end.substring(1);
+            var end = toArray('0% '+new_end+'px');
+            fx.end = [end[0],end[2]];
 			
 			fx.unit = [end[1],end[3]];
 			fx.bgPosReady = true;
