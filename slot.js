@@ -137,6 +137,10 @@ $(document).ready(function() {
         b = new Slot('#slot2', 45, 2),
         c = new Slot('#slot3', 70, 3);
 
+    var machine = [ a, b, c ];
+    var turnOffRoll = 0;
+
+
     /**
     * Slot machine controller
     */
@@ -159,22 +163,26 @@ $(document).ready(function() {
                 }
             }, 100);
         } else if(this.innerHTML == "Stop") {
-            a.stop();
-            b.stop();
-            c.stop();
-            this.innerHTML = "Reset";
+            turnOffRoll++;
+            machine[ turnOffRoll - 1 ].stop();
 
-            disableControl(); //disable control until the slots stop
+            if( turnOffRoll == 3 ){
+                this.innerHTML = "Reset";
 
-            //check every 100ms if slots have stopped
-            //if so, enable the control
-            x = window.setInterval(function() {
-                if(a.speed === 0 && b.speed === 0 && c.speed === 0 && completed === 3) {
-                    enableControl();
-                    window.clearInterval(x);
-                    printResult();
-                }
-            }, 100);
+                disableControl(); //disable control until the slots stop
+
+                //check every 100ms if slots have stopped
+                //if so, enable the control
+                x = window.setInterval(function() {
+                    if(a.speed === 0 && b.speed === 0 && c.speed === 0 && completed === 3) {
+                        enableControl();
+                        window.clearInterval(x);
+                        printResult();
+                    }
+                }, 100);
+                turnOffRoll = 0;
+            }
+
         } else { //reset
             a.reset();
             b.reset();
