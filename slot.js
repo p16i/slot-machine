@@ -57,14 +57,22 @@ $(document).ready(function() {
     Slot.prototype.stop = function() {
         var _this = this,
             limit = 30;
+
         clearInterval(_this.si);
         _this.si = window.setInterval(function() {
-            _this.finalPos(_this.el);
-            $(_this.el).spSpeed(0);
-            $(_this.el).spStop();
-            clearInterval(_this.si);
-            $(_this.el).removeClass('motion');
-            _this.speed = 0;
+            //console.log( _this.speed );
+            if( _this.speed > 0 ){
+                _this.speed -= _this.step;
+                $(_this.el).spSpeed(_this.speed);
+            }else{
+                _this.finalPos(_this.el);
+                $(_this.el).spSpeed(0);
+                $(_this.el).spStop();
+                clearInterval(_this.si);
+                $(_this.el).removeClass('motion');
+                _this.speed = 0;
+            }
+
         }, 100);
     };
 
@@ -81,17 +89,25 @@ $(document).ready(function() {
 
         pos = document.getElementById(el_id).style.backgroundPosition;
         pos = pos.split(' ')[1];
-        pos = parseInt(pos, 10);
+        o_pos = parseInt(pos, 10);
 
-        pos = Math.ceil( pos / 80 ) * 80;
+        pos = Math.ceil( o_pos / 80 ) * 80;
+
+        n_pos = pos - 80;
+        //console.log( Math.abs(n_pos - o_pos )/20);
+        if( Math.abs(n_pos - o_pos ) / 10 < 2 ){
+            pos = n_pos;
+        }
         this.pos = Math.ceil( ( pos % 400 ) / 80 );
 
         $(el).animate(
             {
                 backgroundPosition: pos
             },
+
             {
-                duration: 200,
+                duration: 1000,
+                easing: 'easeInOutElastic',
                 complete: function(){
                     completed++;
                 }
