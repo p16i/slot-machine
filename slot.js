@@ -95,7 +95,7 @@ $(document).ready(function() {
 
         n_pos = pos - 80;
         //console.log( Math.abs(n_pos - o_pos )/20);
-        if( Math.abs(n_pos - o_pos ) / 10 < 2 ){
+        if( Math.abs(n_pos - o_pos ) / 10 < 1 ){
             pos = n_pos;
         }
         this.pos = Math.ceil( ( pos % 400 ) / 80 );
@@ -149,9 +149,9 @@ $(document).ready(function() {
     }
 
     //create slot objects
-    var a = new Slot('#slot1', 30, 1),
-        b = new Slot('#slot2', 45, 2),
-        c = new Slot('#slot3', 70, 3);
+    var a = new Slot('#slot1', parseInt( $('#v_1').val() ), 1),
+        b = new Slot('#slot2', parseInt( $('#v_2').val() ), 2),
+        c = new Slot('#slot3', parseInt( $('#v_3').val() ), 3);
 
     var machine = [ a, b, c ];
     var turnOffRoll = 0;
@@ -163,6 +163,11 @@ $(document).ready(function() {
     $('#control').click(function() {
         var x;
         if(this.innerHTML == "Start") {
+            // Adjust speed
+            a.maxSpeed = parseInt( $('#v_1').val() );
+            b.maxSpeed = parseInt( $('#v_2').val() );
+            c.maxSpeed = parseInt( $('#v_3').val() );
+
             a.start();
             b.start();
             c.start();
