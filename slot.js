@@ -139,9 +139,8 @@ $(document).ready(function() {
     function printResult() {
         var res;
 
-        console.log( a.pos, b.pos, c.pos );
-        if( a.pos  === b.pos && a.pos === c.pos) {
-            res = "You Win!";
+        if( a.speed >= a.maxSpeed && b.speed >= b.maxSpeed && c.speed >= c.maxSpeed ) {
+            res = "You got " + $('#selected-coupon').data('attr').text + ".";
         } else {
             res = "You Lose";
         }
@@ -205,10 +204,7 @@ $(document).ready(function() {
             }
 
         } else { //reset
-            a.reset();
-            b.reset();
-            c.reset();
-            this.innerHTML = "Start";
+            window.location.href=window.location.href;
         }
     });
 });

@@ -1,5 +1,5 @@
 <!DOCTYPE HTML>
-<html>
+<html ng-app>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <title>Slot Machine in Javascript</title>
@@ -7,7 +7,8 @@
 <meta name="keywords" content="javascript, jquery, spritely, animation, sprite, background position, slot, game, games, saurabh, odhyan">
 <link rel="stylesheet" href="style.css">
 
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.6.1/jquery.min.js"></script>
+<script src="//ajax.googleapis.com/ajax/libs/angularjs/1.0.2/angular.min.js"></script>
 <script src="jquery.ui.core.js"></script>
 <script src="jquery.effects.core.js"></script>
 <script src="jquery.spritely.js"></script>
@@ -30,12 +31,23 @@
 			<div class="clear"></div>
 		</div>
 		<div id="result"></div>
-		<div><button id="control">Start</button></div>
+		<div><button id="control" disabled="true">Start</button></div>
 	</div>
     Verocity :
     <input type="text" id="v_1" value="30"/>
     <input type="text" id="v_2" value="45"/>
     <input type="text" id="v_3" value="70"/>
+    <hr>
+    <div ng-controller="CouponsCtrl">
+        Rewards: <span id="selected-coupon">{{selected.text}}</span>
+         <ul class="coupon-list">
+            <li ng-repeat="c in coupons" class="coupon coupon-selected-{{c.selected}}" ng:click="select(c)">
+                <img src="http://placehold.it/100x100" class="coupon-image" />
+              <div class="">{{c.text}}</div>
+            </li>
+          </ul>
+    </div>
+
 </div>
 </body>
 </html>

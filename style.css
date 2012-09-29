@@ -53,6 +53,24 @@ button {
 /*
  * Coupon Style
  */
+.coupon-list {
+    background-color: pink;
+    padding: 10px;
+}
+.coupon {
+    display: inline-block;
+    margin: 5px;
+    background-color: orange;
+    cursor: pointer;
+}
+
 .coupon-selected-true {
     background-color: yellow;
+
+}
+
+.coupon-image {
+    width: 100px;
+    height: 100px;
+    background-color: red;
 }
